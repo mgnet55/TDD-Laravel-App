@@ -14,9 +14,6 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
         },
-        shadows:{
-
-        },
     },
 
     plugins: [require('@tailwindcss/forms')],
