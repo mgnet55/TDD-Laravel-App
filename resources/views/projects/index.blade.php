@@ -1,20 +1,23 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-@forelse($projects as $project)
-    <div>
-        <a href="/projects/{{$project->id}}">{{$project->title}}</a>
-    </div>
-@empty
-    <h1>No projects yet.</h1>
-@endforelse
+<x-app-layout>
 
-</body>
-</html>
+    <div class="flex items-center mb-3">
+        <a href="{{route('projects.create')}}" class="btn btn-primary">New Project</a>
+    </div>
+
+
+    <div class="flex">
+
+        @forelse($projects as $project)
+        <div class="bg-white mr-4 rounded shadow">
+            <h3>{{$project->title}}</h3>
+            <div>{{$project->description}}</div>
+        </div>
+        @empty
+            <div>No projects yet.</div>
+        @endforelse
+    </div>
+
+
+
+</x-app-layout>
+

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+require __DIR__ . '/auth.php';
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,13 +22,8 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/projects', [ProjectController::class, 'index']);
-    Route::get('/projects/create', [ProjectController::class, 'create']);
-    Route::get('/projects/{project}', [ProjectController::class, 'show']);
-    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::resource('projects',ProjectController::class);
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 });
-
-Auth::routes();
 
