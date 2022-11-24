@@ -12,4 +12,8 @@
         @apply bg-blue-picton;
 
     }
+
+    .card {
+        @apply bg-white rounded-lg p-5 shadow
+    }
 }

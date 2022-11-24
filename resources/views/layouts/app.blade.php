@@ -27,7 +27,7 @@
             @endif
 
             <!-- Page Content -->
-            <main class="container mx-auto py-4 max-w-7xl">
+            <main class="container mx-auto py-4 max-w-7xl max-2xl:px-4">
                 {{ $slot }}
             </main>
         </div>
