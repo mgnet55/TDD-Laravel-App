@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +19,11 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory(10)->hasProjects(3)->create();
 
-        $user = \App\Models\User::factory()->hasProjects(2)->create(['email' => 'user@example.com']);
+        $user = \App\Models\User::factory()
+            ->has(Project::factory(5)
+                ->has(Task::factory(4), 'tasks'),
+                'projects')
+            ->create(['email' => 'user@example.com']);
 
         $this->command->table(
             ['Email', 'Password'],

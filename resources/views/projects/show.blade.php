@@ -16,9 +16,15 @@
             <div class="mb-8">
                 <h2 class="text-lg text-gray-400 mb-3">Tasks</h2>
 
-                <div class="card mb-3">Task 1</div>
-                <div class="card mb-3">Task 2</div>
-                <div class="card">Task 3</div>
+                @forelse($project->tasks as $task)
+                    @if ($loop->last)
+                        <div class="card">{{$task->body}}</div>
+                    @else
+                        <div class="card mb-3">{{$task->body}}</div>
+                    @endif
+                @empty
+                    <div class="card text-gray-600">No tasks Yet</div>
+                @endforelse
             </div>
 
 
@@ -26,7 +32,7 @@
             <div class=""><h2 class="text-lg text-gray-400 mb-3">General Notes</h2>
 
                 <label>
-                    <textarea class="card w-full min-h-[200px]">General notes</textarea>
+                    <textarea class="card w-full min-h-[200px] border-none">General notes</textarea>
                 </label>
             </div>
 

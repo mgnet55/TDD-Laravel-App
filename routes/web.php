@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectTasksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +24,6 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('projects', ProjectController::class);
+    Route::get('projects/{project}/tasks', [ProjectTasksController::class,'index']);
+    Route::post('projects/{project}/tasks', [ProjectTasksController::class,'store']);
 });
