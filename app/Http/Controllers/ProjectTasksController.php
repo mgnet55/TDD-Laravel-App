@@ -13,10 +13,15 @@ class ProjectTasksController extends Controller
 
     }
 
-    public function store(Project $project ,ProjectTaskStoreRequest $request)
+    public function store(Project $project, ProjectTaskStoreRequest $request)
     {
+        if ($project->owner->isNot(auth()->user())) {
+            abort(403);
+        }
+
         $project->addTask($request->validated('body'));
-        return redirect()->route('projects.show',$project);
+
+        return redirect()->route('projects.show', $project);
 
     }
 }

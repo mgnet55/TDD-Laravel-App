@@ -71,11 +71,11 @@ class ManageProjectsTest extends TestCase
 
         $this->signIn();
 
-        $projectAttributes = Project::factory()->raw(['owner_id' => auth()->id()]);
+        $project = Project::factory()->raw(['owner_id' => auth()->id()]);
 
-        $this->post('/projects', $projectAttributes)->assertRedirect('/projects');
-        $this->assertDatabaseHas(Project::class, $projectAttributes);
-        $this->get('/projects')->assertSee($projectAttributes['title']);
+        $this->post('/projects', $project)->assertRedirect('/projects');
+        $this->assertDatabaseHas(Project::class, $project);
+        $this->get('/projects')->assertSee($project['title']);
     }
 
     public function test_project_creation_requires_title()

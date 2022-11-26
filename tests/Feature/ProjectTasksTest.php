@@ -35,4 +35,16 @@ class ProjectTasksTest extends TestCase
             ->assertSessionHasErrors('body');
 
     }
+
+    public function test_only_the_owner_of_a_project_may_add_task()
+    {
+        $this->signIn();
+        $project = Project::factory()->create();
+
+        $this->post("/projects/{$project->id}/tasks", ['body' => 'only owner can do this'])
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks',['body' =>'only owner can do this']);
+
+    }
 }

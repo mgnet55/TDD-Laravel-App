@@ -16,15 +16,20 @@
             <div class="mb-8">
                 <h2 class="text-lg text-gray-400 mb-3">Tasks</h2>
 
-                @forelse($project->tasks as $task)
-                    @if ($loop->last)
-                        <div class="card">{{$task->body}}</div>
-                    @else
-                        <div class="card mb-3">{{$task->body}}</div>
-                    @endif
-                @empty
-                    <div class="card text-gray-600">No tasks Yet</div>
-                @endforelse
+                @foreach($project->tasks as $task)
+                    <div class="card mb-3">{{$task->body}}</div>
+                @endforeach
+                <div class="card text-gray-600">
+                    <form action="{{route('projects.tasks.store',$project)}}" method="POST"
+                          class="flex justify-between items-center">
+                        @csrf
+                        <label class="grow lg:mr-2">
+                            <input type="text" name="body" class="border-none w-full "
+                                   placeholder="Begin adding tasks...">
+                        </label>
+                        <button class="btn btn-blue flex-none" type="submit" value="">Add a new task</button>
+                    </form>
+                </div>
             </div>
 
 
