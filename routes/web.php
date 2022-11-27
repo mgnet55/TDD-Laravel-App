@@ -24,6 +24,8 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('projects', ProjectController::class);
-    Route::get('projects/{project}/tasks', [ProjectTasksController::class,'index']);
-    Route::post('projects/{project}/tasks', [ProjectTasksController::class,'store'])->name('projects.tasks.store');
+    //Route::get('projects/{project}/tasks', [ProjectTasksController::class, 'index']);
+    Route::group([], function () {
+        Route::resource('projects.tasks', ProjectTasksController::class)->only(['store', 'update', 'destroy']);
+    })->scopeBindings();
 });

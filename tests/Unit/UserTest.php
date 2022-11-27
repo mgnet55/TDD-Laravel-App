@@ -2,7 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Models\User;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -12,10 +13,9 @@ class UserTest extends TestCase
 {
     use refreshDatabase;
 
-    public function test_user_has_projects()
+    public function test_task_belongs_to_project()
     {
-        $user = User::factory()->create();
-
-        $this->assertInstanceOf(Collection::class, $user->projects);
+        $task = Task::factory()->create();
+        $this->assertInstanceOf(Project::class, $task->project);
     }
 }

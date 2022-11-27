@@ -30,7 +30,7 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_guest_cannot_view_a_single_project()
     {
-        $this->get('/projects/'.Project::factory()->create()->id)
+        $this->get('/projects/' . Project::factory()->create()->id)
             ->assertRedirect('login');
 
     }
@@ -48,9 +48,9 @@ class ManageProjectsTest extends TestCase
 
         $project = $user->projects()->first();
 
-        $this->get('/projects/'.$project->id)
+        $this->get('/projects/' . $project->id)
             ->assertSee($project->title)
-            ->assertSee(\Str::limit($project->description,100));
+            ->assertSee(\Str::limit($project->description, 100));
 
     }
 
@@ -61,7 +61,7 @@ class ManageProjectsTest extends TestCase
 
         $project = Project::factory()->create();
 
-        $this->get('/projects/'.$project->id)
+        $this->get('/projects/' . $project->id)
             ->assertStatus(404);
     }
 
@@ -73,7 +73,8 @@ class ManageProjectsTest extends TestCase
 
         $project = Project::factory()->raw(['owner_id' => auth()->id()]);
 
-        $this->post('/projects', $project)->assertRedirect('/projects');
+        $this->post('/projects', $project)
+            ->assertRedirect('/projects/1');
         $this->assertDatabaseHas(Project::class, $project);
         $this->get('/projects')->assertSee($project['title']);
     }

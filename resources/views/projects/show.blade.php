@@ -17,17 +17,33 @@
                 <h2 class="text-lg text-gray-400 mb-3">Tasks</h2>
 
                 @foreach($project->tasks as $task)
-                    <div class="card mb-3">{{$task->body}}</div>
+                    <div class="card mb-3 py-3.5">
+                        <form action="{{route('projects.tasks.update',[$project,$task])}}" method="post">
+                            @method('PATCH')
+                            @csrf
+                            <div class="flex">
+                                <label for="body" class="w-full">
+                                    <input type="text" name="body" id=""
+                                           @class(['border-none p-0 w-full','text-gray-400'=>$task->completed])
+                                           value="{{$task->body}}">
+                                </label>
+                                <label for="completed">
+                                    <input type="checkbox" name="completed" id="" class="rounded text-blue-picton"
+                                           onchange="this.form.submit()" @checked($task->completed)>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
                 @endforeach
-                <div class="card text-gray-600">
+                <div class="card text-gray-600 py-3.5">
                     <form action="{{route('projects.tasks.store',$project)}}" method="POST"
                           class="flex justify-between items-center">
                         @csrf
                         <label class="grow lg:mr-2">
-                            <input type="text" name="body" class="border-none w-full "
+                            <input type="text" name="body" class="border-none w-full p-0"
                                    placeholder="Begin adding tasks...">
                         </label>
-                        <button class="btn btn-blue flex-none" type="submit" value="">Add a new task</button>
+                        <button class="btn btn-blue" type="submit" value="">Add a new task</button>
                     </form>
                 </div>
             </div>
