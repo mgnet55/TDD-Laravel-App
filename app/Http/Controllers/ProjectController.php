@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectStoreRequest;
+use App\Http\Requests\ProjectUpdateRequest;
 use App\Models\Project;
 use Request;
 
@@ -15,9 +16,8 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        if ($project->owner_id != auth()->id()) {
-            abort(404);
-        }
+        $this->authorize('owner', $project);
+
         return view('projects.show', ['project' => $project]);
     }
 
@@ -31,6 +31,16 @@ class ProjectController extends Controller
     {
         $project = auth()->user()?->projects()->create($request->validated());
 
-        return redirect()->route('projects.show',$project);
+        return redirect()->route('projects.show', $project);
     }
+
+    public function update(Project $project, ProjectUpdateRequest $request)
+    {
+        $this->authorize('owner', $project);
+
+        $project->update($request->validated());
+
+        return redirect()->route('projects.show', $project);
+    }
+
 }

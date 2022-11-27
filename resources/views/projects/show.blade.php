@@ -52,9 +52,18 @@
             {{--General Notes--}}
             <div class=""><h2 class="text-lg text-gray-400 mb-3">General Notes</h2>
 
-                <label>
-                    <textarea class="card w-full min-h-[200px] border-none">General notes</textarea>
-                </label>
+                <form action="{{route('projects.update',$project)}}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <label>
+                        <textarea name="notes"
+                                  class="card w-full min-h-[200px] border-none mb-4">{{$project->notes}}</textarea>
+                    </label>
+                    @if($errors->hasAny())
+                        {{print_r($errors)}}
+                    @endif
+                    <button type="submit" class="btn btn-blue">Save</button>
+                </form>
             </div>
 
         </div>

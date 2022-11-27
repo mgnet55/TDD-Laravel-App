@@ -6,20 +6,13 @@ use App\Http\Requests\ProjectTaskStoreRequest;
 use App\Http\Requests\ProjectTaskUpdateRequest;
 use App\Models\Project;
 use App\Models\Task;
-use Illuminate\Http\Request;
 
 class ProjectTasksController extends Controller
 {
-    public function index(Project $project)
-    {
-
-    }
-
+    
     public function store(Project $project, ProjectTaskStoreRequest $request)
     {
-        if ($project->owner->isNot(auth()->user())) {
-            abort(403);
-        }
+        $this->authorize('owner', $project);
 
         $project->addTask($request->validated('body'));
 
@@ -29,9 +22,7 @@ class ProjectTasksController extends Controller
 
     public function update(Project $project, Task $task, ProjectTaskUpdateRequest $request)
     {
-        if ($project->owner->isNot(auth()->user())) {
-            abort(403);
-        }
+        $this->authorize('owner', $project);
 
         $task->update([
             'body' => $request->validated('body'),

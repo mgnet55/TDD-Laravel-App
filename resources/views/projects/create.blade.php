@@ -1,39 +1,51 @@
 <x-app-layout>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <div class="flex mb-3 py-4">
+        <div class="flex justify-between w-full items-end">
+            <p class="text-gray-400 text-sm">
+                <a href="{{route('projects.index')}}">My Projects</a>
+            </p>
         </div>
-    @endif
-    <form action="/projects" class="pt-3" method="POST">
+    </div>
 
+    <div class="card">
 
-        @csrf
-        <h1 class="heading is-1">Create a Project</h1>
-        <div class="field">
-            <label class="label" for="title">Title</label>
-            <div class="control">
-                <input class="input" name="title" type="text" placeholder="Enter placeholder">
+        <h2 class="text-lg text-gray-400 mb-3">Create Project</h2>
+
+        <form action="/projects" class="pt-3" method="POST">
+            @if ($errors->any())
+                <div class="text-red-600 mb-2">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>* {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @csrf
+
+            <div class="mb-2">
+                <label class="" for="title">Title
+                    <input class="w-full rounded" name="title" type="text" placeholder="title">
+                </label>
             </div>
-        </div>
 
-        <div class="field">
-            <label for="description" class="label">Description</label>
-            <div class="control">
-                <textarea class="textarea" name="description" placeholder="placeholder" rows="5"></textarea>
+            <div class="mb-2">
+                <label for="description" class="">Description
+                    <input class=" w-full rounded" name="description" type="text" placeholder="description">
+                </label>
             </div>
-        </div>
 
-        <div class="field">
-            <div class="control">
-                <button class="btn btn-primary" type="submit">Create Project</button>
-                <a href="{{route('projects.index')}}" class="btn btn-default">Cancel</a>
+            <div class="mb-2">
+                <label for="notes" class="w-full">General Notes
+                    <textarea class="w-full rounded" name="notes" placeholder="notes" rows="5"></textarea>
+                </label>
             </div>
-        </div>
-    </form>
+
+
+            <button class="btn btn-blue" type="submit">Create Project</button>
+            <a href="{{route('projects.index')}}" class="btn bg-gray-800">Cancel</a>
+        </form>
+    </div>
 
 </x-app-layout>

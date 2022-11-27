@@ -9,7 +9,12 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','description','owner_id'];
+    protected $fillable = [
+        'title',
+        'description',
+        'owner_id',
+        'notes'
+    ];
 
     public function owner()
     {
@@ -21,8 +26,8 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function addTask(String $task)
+    public function addTask(string $task)
     {
-        return $this->tasks()->create(['body'=>$task]);
+        return $this->tasks()->create(['body' => $task]);
     }
 }
