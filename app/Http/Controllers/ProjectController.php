@@ -27,6 +27,13 @@ class ProjectController extends Controller
     }
 
 
+    public function edit(Project $project)
+    {
+        $this->authorize('owner', $project);
+        return view('projects.edit', ['project' => $project]);
+
+    }
+
     public function store(ProjectStoreRequest $request)
     {
         $project = auth()->user()?->projects()->create($request->validated());
@@ -36,9 +43,7 @@ class ProjectController extends Controller
 
     public function update(Project $project, ProjectUpdateRequest $request)
     {
-        $this->authorize('owner', $project);
-
-        $project->update($request->validated());
+        $project->fill($request->validated())->save();
 
         return redirect()->route('projects.show', $project);
     }

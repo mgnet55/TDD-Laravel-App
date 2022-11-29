@@ -10,9 +10,10 @@
 
     <div class="card">
 
-        <h2 class="text-lg text-gray-400 mb-3">Create Project</h2>
-        <form action="{{route('projects.store')}}" class="pt-3" method="POST">
-            @include('projects._form',['project' =>new App\Models\Project ,'buttonText'=>'Create Project','cancelRoute'=>'index'])
+        <h2 class="text-lg text-gray-400 mb-3">Update Project</h2>
+        <form action="{{route('projects.update',$project)}}" class="pt-3" method="POST">
+            @method('PATCH')
+            @include('projects._form',['buttonText'=>'Update Project','cancelRoute'=>'show'])
         </form>
     </div>
 

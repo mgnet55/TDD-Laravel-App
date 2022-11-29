@@ -99,17 +99,47 @@ class ManageProjectsTest extends TestCase
 
     }
 
+    public function test_project_owner_can_edit_thier_project()
+    {
+        $this->actingAs($user = User::factory()->hasProjects()->create());
+        $project = $user->projects()->first();
+
+        $this->get('/projects/' . $project->id . '/edit')->assertOk();
+
+    }
+
     public function test_project_owner_can_update_thier_project()
+    {
+        $project = Project::factory()->create();
+
+        $this->actingAs($project->owner);
+
+        $this->patch('/projects/' . $project->id, $attributes = ['title' => 'title', 'description' => 'description', 'notes' => 'notes'])
+            ->assertRedirect('/projects/' . $project->id);
+
+        $this->assertDatabaseHas(Project::class, $attributes);
+        $this->get('/projects/' . $project->id)
+            ->assertSee('title')
+            ->assertSee('description')
+            ->assertSee('notes');
+
+    }
+
+    public function test_project_owner_can_update_thier_project_notes_alone()
     {
 
         $this->actingAs($user = User::factory()->hasProjects()->create());
 
         $project = $user->projects()->first();
 
-        $this->patch('/projects/' . $project->id, ['notes' => 'updated'])->assertRedirect('/projects/' . $project->id);
+        $this->patch('/projects/' . $project->id, ['notes' => 'notes'])
+            ->assertRedirect('/projects/' . $project->id);
 
-        $this->assertDatabaseHas(Project::class, ['notes' => 'updated', 'id' => $project->id]);
-        $this->get('/projects/' . $project->id)->assertSee('updated');
+        $this->assertDatabaseHas(Project::class, ['notes' => 'notes']);
+        $this->get('/projects/' . $project->id)
+            ->assertSee('notes');
+
+        $this->get('/projects/' . $project->id . '/edit')->assertOk();
 
     }
 
@@ -128,12 +158,10 @@ class ManageProjectsTest extends TestCase
     public function test_authenticated_user_cannot_update_others_project()
     {
 
-        $this->actingAs($user = User::factory()->create());
+        $project = project::factory()->create();
 
-        $anotherUser = User::factory()->hasProjects()->create();
-        $project = $anotherUser->projects()->first();
-
-        $this->patch('/projects/' . $project->id, ['notes' => 'updated'])->assertStatus(403);
+        $this->signIn();
+        $this->patch('/projects/' . $project->id, ['title' => 'title', 'description' => 'description'])->assertStatus(403);
 
         $this->assertDatabaseMissing(Project::class, ['notes' => 'updated', 'id' => $project->id]);
 

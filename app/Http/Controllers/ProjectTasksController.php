@@ -9,7 +9,7 @@ use App\Models\Task;
 
 class ProjectTasksController extends Controller
 {
-    
+
     public function store(Project $project, ProjectTaskStoreRequest $request)
     {
         $this->authorize('owner', $project);
@@ -24,11 +24,8 @@ class ProjectTasksController extends Controller
     {
         $this->authorize('owner', $project);
 
-        $task->update([
-            'body' => $request->validated('body'),
-            'completed' => $request->safe()->has('completed'),
-        ]);
-
+        $task->fill($request->validated())->save();
+        
         return redirect()->route('projects.show', $project);
 
     }

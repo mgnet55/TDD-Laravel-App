@@ -16,6 +16,13 @@ class ProjectTaskUpdateRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'completed' => (bool)$this->completed,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
