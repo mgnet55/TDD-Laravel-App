@@ -18,8 +18,9 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'body'=>fake()->realText(30),
-            'project_id'=>Project::factory(),
+            'body' => fake()->realText(30),
+            'project_id' => Project::factory(),
+            'completed' => false,
         ];
     }
 }

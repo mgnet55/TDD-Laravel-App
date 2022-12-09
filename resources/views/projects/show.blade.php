@@ -69,7 +69,11 @@
         </div>
 
         <div class="lg:w-1/4 px-3">
+
             <x-project.card :project="$project"></x-project.card>
+
+            @include('projects._activity')
+
         </div>
     </div>
 

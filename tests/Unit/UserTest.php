@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Project;
 use App\Models\Task;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

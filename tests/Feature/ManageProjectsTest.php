@@ -85,7 +85,7 @@ class ManageProjectsTest extends TestCase
     }
 
 
-    public function test_a_user_can_see_thier_project()
+    public function test_a_user_can_see_their_project()
     {
 
         $this->actingAs($user = User::factory()->hasProjects()->create());
@@ -94,12 +94,12 @@ class ManageProjectsTest extends TestCase
 
         $this->get('/projects/' . $project->id)
             ->assertSee($project->title)
-            ->assertSee(\Str::limit($project->description, 100))
+            ->assertSee(\Str::limit($project->description))
             ->assertSee($project->notes);
 
     }
 
-    public function test_project_owner_can_edit_thier_project()
+    public function test_project_owner_can_edit_their_project()
     {
         $this->actingAs($user = User::factory()->hasProjects()->create());
         $project = $user->projects()->first();
@@ -108,7 +108,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_update_thier_project()
+    public function test_project_owner_can_update_their_project()
     {
         $project = Project::factory()->create();
 
@@ -125,7 +125,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_update_thier_project_notes_alone()
+    public function test_project_owner_can_update_their_project_notes_alone()
     {
 
         $this->actingAs($user = User::factory()->hasProjects()->create());

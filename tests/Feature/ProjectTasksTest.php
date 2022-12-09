@@ -33,12 +33,46 @@ class ProjectTasksTest extends TestCase
 
         $task = $project->addTask('test task');
 
-        $this->patch("/projects/{$project->id}/tasks/{$task->id}", ['body' => 'changed task', 'completed' => true]);
+        $this->patch("/projects/{$project->id}/tasks/{$task->id}", ['body' => 'changed task']);
         $this->get("/projects/{$project->id}")
             ->assertSee('changed task')
             ->assertDontSee('task task');
 
-        $this->assertDatabaseHas('tasks', ['body' => 'changed task', 'completed' => true]);
+        $this->assertDatabaseHas('tasks', ['body' => 'changed task', 'completed' => false]);
+
+    }
+
+    public function test_task_can_be_marked_as_completed()
+    {
+        $this->signIn();
+        $project = Project::factory()
+            ->for(auth()->user(), 'owner')
+            ->create();
+
+        $task = $project->addTask('test task');
+
+        $this->patch("/projects/{$project->id}/tasks/{$task->id}", ['body' => 'test task', 'completed' => true]);
+        $this->get("/projects/{$project->id}")
+            ->assertSee('test task');
+
+        $this->assertDatabaseHas('tasks', ['body' => 'test task', 'completed' => true]);
+
+    }
+
+    public function test_task_can_be_marked_as_incomplete()
+    {
+        $this->signIn();
+        $project = Project::factory()
+            ->for(auth()->user(), 'owner')
+            ->create();
+
+        $task = $project->addTask('test task');
+
+        $this->patch("/projects/$project->id/tasks/$task->id", ['body' => 'test task', 'completed' => true]);
+        $this->assertDatabaseHas('tasks', ['body' => 'test task', 'completed' => true]);
+
+        $this->patch("/projects/$project->id/tasks/$task->id", ['body' => 'test task', 'completed' => false]);
+        $this->assertDatabaseHas('tasks', ['body' => 'test task', 'completed' => false]);
 
     }
 
