@@ -11,9 +11,12 @@ use Illuminate\Auth\Access\AuthorizationException;
 class ProjectTasksController extends Controller
 {
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(Project $project, ProjectTaskStoreRequest $request)
     {
-        $this->authorize('owner', $project);
+        $this->authorize('member_or_owner', $project);
 
         $project->addTask($request->validated('body'));
 
@@ -26,7 +29,7 @@ class ProjectTasksController extends Controller
      */
     public function update(Project $project, Task $task, ProjectTaskUpdateRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $this->authorize('owner', $project);
+        $this->authorize('member_or_owner', $project);
 
         $task->fill($request->safe()->except('completed'))->save();
 

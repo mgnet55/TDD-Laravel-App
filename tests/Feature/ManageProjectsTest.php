@@ -13,7 +13,7 @@ class ManageProjectsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     // Guest Tests
-    public function test_a_guest_cannot_create_project()
+    public function test_a_guest_cannot_create_project(): void
     {
 
         $this->post('/projects', Project::factory()->raw())
@@ -21,7 +21,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_a_guest_cannot_view_projects()
+    public function test_a_guest_cannot_view_projects(): void
     {
 
         $this->get('/projects/')
@@ -29,14 +29,14 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_a_guest_cannot_view_a_single_project()
+    public function test_a_guest_cannot_view_a_single_project(): void
     {
         $this->get('/projects/' . Project::factory()->create()->id)
             ->assertRedirect('login');
 
     }
 
-    public function test_a_guest_cannot_view_project_creation_form()
+    public function test_a_guest_cannot_view_project_creation_form(): void
     {
         $this->get('/projects/create')
             ->assertRedirect('login');
@@ -45,7 +45,7 @@ class ManageProjectsTest extends TestCase
 
 
     // Authenticated User features
-    public function test_project_creation_requires_title()
+    public function test_project_creation_requires_title(): void
     {
         $this->signIn();
         $this->post('/projects', Project::factory()->raw(['title' => '']))
@@ -53,7 +53,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_creation_requires_description()
+    public function test_project_creation_requires_description(): void
     {
         $this->signIn();
         $this->post('/projects', Project::factory()->raw(['description' => '']))
@@ -61,7 +61,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_a_user_can_create_a_project()
+    public function test_a_user_can_create_a_project(): void
     {
 
         $this->signIn();
@@ -74,7 +74,7 @@ class ManageProjectsTest extends TestCase
         $this->get('/projects')->assertSee($project['title']);
     }
 
-    public function test_a_user_can_see_their_project()
+    public function test_a_user_can_see_their_project(): void
     {
 
         $this->actingAs($user = User::factory()->hasProjects()->create());
@@ -88,7 +88,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_edit_their_project()
+    public function test_project_owner_can_edit_their_project(): void
     {
         $this->actingAs($user = User::factory()->hasProjects()->create());
         $project = $user->projects()->first();
@@ -97,7 +97,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_update_their_project()
+    public function test_project_owner_can_update_their_project(): void
     {
         $project = Project::factory()->create();
 
@@ -110,7 +110,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_delete_their_project()
+    public function test_project_owner_can_delete_their_project(): void
     {
         $project = Project::factory()->create();
 
@@ -123,7 +123,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_project_owner_can_update_their_project_notes_alone()
+    public function test_project_owner_can_update_their_project_notes_alone(): void
     {
 
         $this->actingAs($user = User::factory()->hasProjects()->create());
@@ -142,7 +142,7 @@ class ManageProjectsTest extends TestCase
     }
 
     // Project Owner features
-    public function test_authenticated_user_cannot_see_others_project()
+    public function test_authenticated_user_cannot_see_others_project(): void
     {
 
         $this->signIn();
@@ -153,7 +153,7 @@ class ManageProjectsTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function test_authenticated_user_cannot_update_project()
+    public function test_authenticated_user_cannot_update_project(): void
     {
 
 
@@ -169,7 +169,7 @@ class ManageProjectsTest extends TestCase
 
     }
 
-    public function test_authenticated_user_cannot_delete_project()
+    public function test_authenticated_user_cannot_delete_project(): void
     {
         $project = Project::factory()->create();
 

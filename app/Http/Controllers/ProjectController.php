@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProjectStoreRequest;
 use App\Http\Requests\ProjectUpdateRequest;
 use App\Models\Project;
+use Illuminate\Auth\Access\AuthorizationException;
 use Request;
 
 class ProjectController extends Controller
@@ -14,9 +15,12 @@ class ProjectController extends Controller
         return view('projects.index', ['projects' => auth()->user()?->projects]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function show(Project $project)
     {
-        $this->authorize('owner', $project);
+        $this->authorize('member_or_owner', $project);
 
         return view('projects.show', ['project' => $project]);
     }
@@ -27,9 +31,12 @@ class ProjectController extends Controller
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     public function edit(Project $project)
     {
-        $this->authorize('owner', $project);
+        $this->authorize('member_or_owner', $project);
         return view('projects.edit', ['project' => $project]);
 
     }
@@ -48,6 +55,9 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(Project $project)
     {
         $this->authorize('owner', $project);

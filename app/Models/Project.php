@@ -35,7 +35,6 @@ class Project extends Model
     public function tasks()
     {
         return $this->hasMany(Task::class);
-
     }
 
     public function activity()
@@ -43,9 +42,20 @@ class Project extends Model
         return $this->hasMany(Activity::class)->latest('id');
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_member');
+    }
+
+
     public function addTask(string $task)
     {
         return $this->tasks()->create(['body' => $task]);
+    }
+
+    public function invite(User $user)
+    {
+        $this->members()->attach($user);
     }
 
 
