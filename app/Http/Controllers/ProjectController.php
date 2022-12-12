@@ -48,4 +48,13 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project);
     }
 
+    public function destroy(Project $project)
+    {
+        $this->authorize('owner', $project);
+
+        $project->delete();
+
+        return redirect()->route('projects.index');
+    }
+
 }

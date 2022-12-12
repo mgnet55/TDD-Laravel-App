@@ -19,6 +19,8 @@ class Project extends Model
         'notes'
     ];
 
+    protected static array $recordableActivities = ['created', 'updated'];
+
     public function path()
     {
         return "/projects/{$this->id}";
