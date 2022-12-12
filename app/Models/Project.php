@@ -21,7 +21,7 @@ class Project extends Model
 
     protected static array $recordableActivities = ['created', 'updated'];
 
-    public function path()
+    public function path(): string
     {
         return "/projects/{$this->id}";
     }
@@ -44,9 +44,8 @@ class Project extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class, 'project_member');
+        return $this->belongsToMany(User::class, 'project_member')->withTimestamps();
     }
-
 
     public function addTask(string $task)
     {

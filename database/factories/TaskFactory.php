@@ -20,7 +20,7 @@ class TaskFactory extends Factory
         return [
             'body' => fake()->realText(30),
             'project_id' => Project::factory(),
-            'completed' => false,
+            'completed' => fake()->boolean,
         ];
     }
 }

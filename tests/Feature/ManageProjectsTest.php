@@ -77,9 +77,7 @@ class ManageProjectsTest extends TestCase
     public function test_a_user_can_see_their_project(): void
     {
 
-        $this->actingAs($user = User::factory()->hasProjects()->create());
-
-        $project = $user->projects()->first();
+        $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
         $this->get('/projects/' . $project->id)
             ->assertSee($project->title)
@@ -88,10 +86,23 @@ class ManageProjectsTest extends TestCase
 
     }
 
+    public function test_a_user_can_see_all_invited_projects(): void
+    {
+        $project = Project::factory()->create();
+
+        $user = $this->signIn();
+
+        $project->invite($user);
+
+        $this->get('/projects/')
+            ->assertSee($project->title);
+
+        $this->get('/projects/' . $project->id . '/edit')->assertOk();
+    }
+
     public function test_project_owner_can_edit_their_project(): void
     {
-        $this->actingAs($user = User::factory()->hasProjects()->create());
-        $project = $user->projects()->first();
+        $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
         $this->get('/projects/' . $project->id . '/edit')->assertOk();
 
@@ -99,11 +110,9 @@ class ManageProjectsTest extends TestCase
 
     public function test_project_owner_can_update_their_project(): void
     {
-        $project = Project::factory()->create();
+        $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
-        $this->actingAs($project->owner);
-
-        $this->patch('/projects/' . $project->id, $attributes = ['title' => 'title', 'description' => 'description', 'notes' => 'notes'])
+        $this->patch($project->path(), $attributes = ['title' => 'title', 'description' => 'description', 'notes' => 'notes'])
             ->assertRedirect('/projects/' . $project->id);
 
         $this->assertDatabaseHas(Project::class, $attributes);
@@ -112,9 +121,7 @@ class ManageProjectsTest extends TestCase
 
     public function test_project_owner_can_delete_their_project(): void
     {
-        $project = Project::factory()->create();
-
-        $this->actingAs($project->owner);
+        $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
         $this->delete($project->path())
             ->assertRedirect('/projects/');
@@ -126,9 +133,7 @@ class ManageProjectsTest extends TestCase
     public function test_project_owner_can_update_their_project_notes_alone(): void
     {
 
-        $this->actingAs($user = User::factory()->hasProjects()->create());
-
-        $project = $user->projects()->first();
+        $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
         $this->patch('/projects/' . $project->id, ['notes' => 'notes'])
             ->assertRedirect('/projects/' . $project->id);
