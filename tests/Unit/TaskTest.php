@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,11 +11,12 @@ class TaskTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
+    public function test_task_belongs_to_project()
+    {
+        $task = Task::factory()->create();
+        $this->assertInstanceOf(Project::class, $task->project);
+    }
+
     public function test_task_can_be_completed()
     {
         $this->withoutExceptionHandling();

@@ -34,13 +34,11 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
 
-        // TODO Sorting Tasks by Completed Status then by recently added
-        //->orderBy("completed');
     }
 
     public function activity()
     {
-        return $this->hasMany(Activity::class)->latest()->latest('id');
+        return $this->hasMany(Activity::class)->latest('id');
     }
 
     public function addTask(string $task)
