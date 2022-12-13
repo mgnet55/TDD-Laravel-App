@@ -1,14 +1,30 @@
 <x-app-layout>
 
-    <div class="flex mb-3 py-4">
+    <div class="flex items-center mb-3 pb-4">
         <div class="flex justify-between w-full items-end">
             <p class="text-gray-400 text-sm">
                 <a href="{{route('projects.index')}}">My Projects</a> / {{$project->title}}
             </p>
 
-            <a href="{{route('projects.edit',$project)}}" class="btn btn-blue">Edit Project</a>
+            <div class="flex items-center">
+
+                @foreach($project->members as $member)
+                    <img src="{{gravatar_url($member->email)}}"
+                         alt="{{$member->name}}'s avatar"
+                         title="{{$member->name}}"
+                         class="rounded-full w-8 mr-1">
+                @endforeach
+
+                <img src="{{gravatar_url($project->owner->email)}}"
+                     alt="{{$project->owner->name}}'s avatar"
+                     title="{{$project->owner->name}}"
+                     class="rounded-full w-8 mr-1">
+
+                <a href="{{route('projects.edit',$project)}}" class="btn btn-blue ml-5">Edit Project</a>
+            </div>
         </div>
     </div>
+
 
     <div class="lg:flex -mx-3">
         <div class="lg:w-3/4 px-3 mb-6">
