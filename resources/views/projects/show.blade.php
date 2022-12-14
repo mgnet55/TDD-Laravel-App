@@ -37,11 +37,14 @@
                         <form action="{{route('projects.tasks.update',[$project,$task])}}" method="post">
                             @method('PATCH')
                             @csrf
-                            <div class="flex">
-                                <label for="body" class="w-full">
-                                    <input type="text" name="body" id=""
-                                           @class(['border-none p-0 w-full','text-gray-400'=>$task->completed])
-                                           value="{{$task->body}}">
+                            <div class="flex group">
+                                <label for="body" class="w-full mr-2 parent">
+                                    <input
+                                        type="text"
+                                        name="body"
+                                        @class(['border-none group-focus:ring-2 focus:ring-0 p-0 w-full','text-gray-400 parent-focus:bg-black'=>$task->completed])
+                                        value="{{$task->body}}"
+                                    >
                                 </label>
                                 <label for="completed">
                                     <input type="checkbox" name="completed" id="" class="rounded text-blue-picton"
@@ -57,7 +60,7 @@
                         @csrf
                         <label class="grow lg:mr-2">
                             <input type="text" name="body" class="border-none w-full p-0"
-                                   placeholder="Begin adding tasks...">
+                                   placeholder="Add new task....">
                         </label>
                         <button class="btn btn-blue" type="submit" value="">Add a new task</button>
                     </form>
@@ -89,6 +92,26 @@
             <x-project.card :project="$project"></x-project.card>
 
             @include('projects._activity')
+
+            <div class="card flex flex-col mt-3" style="min-height:200px">
+                <h3 class="font-normal text-xl mb-3 py-4 border-l-4 border-blue-picton -ml-5 pl-4">Invite a User</h3>
+
+                <form action="{{route('projects.invite',$project)}}" method="post" class="text-right">
+                    @csrf
+                    <div class="mb-3">
+                        <label>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                class="border border-grey rounded w-full"
+                                placeholder="user@example.com">
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Invite</button>
+                </form>
+            </div>
+
 
         </div>
     </div>

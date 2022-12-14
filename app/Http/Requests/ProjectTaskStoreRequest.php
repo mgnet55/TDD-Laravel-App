@@ -13,7 +13,7 @@ class ProjectTaskStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return \Gate::allows('member_or_owner', $this->project);
     }
 
     /**
@@ -24,7 +24,7 @@ class ProjectTaskStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'body'=>'required',
+            'body' => 'required',
         ];
     }
 }

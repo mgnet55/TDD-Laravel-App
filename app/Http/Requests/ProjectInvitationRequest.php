@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectTaskUpdateRequest extends FormRequest
+class ProjectInvitationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,14 +13,7 @@ class ProjectTaskUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Gate::allows('member_or_owner', $this->project);
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'completed' => (bool)$this->completed,
-        ]);
+        return \Gate::allows('owner', $this->project);
     }
 
     /**
@@ -31,10 +24,14 @@ class ProjectTaskUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'body' => 'required',
-            'completed' => ''
+            'email' => 'required|email|exists:users,email'
         ];
     }
 
-
+    public function messages()
+    {
+        return [
+            'email.exists' => 'This Email isn\'t associated with a valid account.'
+        ];
+    }
 }

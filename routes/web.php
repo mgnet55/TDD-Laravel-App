@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectInvitationsController;
 use App\Http\Controllers\ProjectTasksController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('projects', ProjectController::class);
+    Route::post('projects/{project}/invitations', [ProjectInvitationsController::class, 'invite'])->name('projects.invite');
     Route::group([], function () {
         Route::resource('projects.tasks', ProjectTasksController::class)->only(['store', 'update', 'destroy']);
     })->scopeBindings();
