@@ -14,8 +14,8 @@ return new class extends Migration {
     {
         Schema::create('project_member', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class);
-            $table->foreignIdFor(\App\Models\Project::class);
+            $table->foreignIdFor(\App\Models\User::class)->constrained();
+            $table->foreignIdFor(\App\Models\Project::class)->constrained();
             $table->timestamps();
 
             $table->index(['user_id', 'project_id']);

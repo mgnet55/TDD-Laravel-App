@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Str;
 use Tests\TestCase;
 
 class ManageProjectsTest extends TestCase
@@ -43,7 +43,6 @@ class ManageProjectsTest extends TestCase
 
     }
 
-
     // Authenticated User features
     public function test_project_creation_requires_title(): void
     {
@@ -63,15 +62,13 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_user_can_create_a_project(): void
     {
-
         $this->signIn();
+        $project = Project::factory()->raw();
 
-        $project = Project::factory()->raw(['owner_id' => auth()->id()]);
-
-        $this->post('/projects', $project)
-            ->assertRedirect('/projects/1');
-        $this->assertDatabaseHas(Project::class, $project);
-        $this->get('/projects')->assertSee($project['title']);
+        $this->followingRedirects()->post('/projects', $project)
+            ->assertSee($project['title'])
+            ->assertSee(\Str::limit($project['description'], 100))
+            ->assertSee($project['notes']);
     }
 
     public function test_a_user_can_see_their_project(): void
@@ -81,7 +78,7 @@ class ManageProjectsTest extends TestCase
 
         $this->get('/projects/' . $project->id)
             ->assertSee($project->title)
-            ->assertSee(\Str::limit($project->description))
+            ->assertSee(Str::limit($project->description))
             ->assertSee($project->notes);
 
     }
@@ -135,18 +132,29 @@ class ManageProjectsTest extends TestCase
 
         $project = Project::factory()->create(['owner_id' => $this->signIn()->id]);
 
-        $this->patch('/projects/' . $project->id, ['notes' => 'notes'])
-            ->assertRedirect('/projects/' . $project->id);
+        $this->followingRedirects()
+            ->patch($project->path(), ['notes' => 'updated notes'])
+            ->assertSee('updated notes');
 
-        $this->assertDatabaseHas(Project::class, ['notes' => 'notes']);
-        $this->get('/projects/' . $project->id)
-            ->assertSee('notes');
-
-        $this->get('/projects/' . $project->id . '/edit')->assertOk();
+        $this->assertDatabaseHas(Project::class, ['notes' => 'updated notes']);
 
     }
 
     // Project Owner features
+    public function test_project_member_cannot_delete_their_project(): void
+    {
+        $userToInvite = $this->signIn();
+
+        $project = Project::factory()->create();
+        $project->invite($userToInvite);
+
+        $this->delete($project->path())
+            ->assertStatus(403);
+
+        $this->assertDatabaseHas(Project::class, ['id' => $project->id]);
+
+    }
+
     public function test_authenticated_user_cannot_see_others_project(): void
     {
 
@@ -164,7 +172,9 @@ class ManageProjectsTest extends TestCase
 
         $project = Project::factory()->create();
 
-        $this->patch('/projects/' . $project->id, ['notes' => 'updated'])->assertStatus(302)->assertRedirect('/login');
+        $this->patch('/projects/' . $project->id, ['notes' => 'updated'])
+            ->assertStatus(302)
+            ->assertRedirect('/login');
         $this->assertDatabaseMissing(Project::class, ['notes' => 'updated', 'id' => $project->id]);
 
         $this->signIn();
@@ -188,6 +198,5 @@ class ManageProjectsTest extends TestCase
 
 
     }
-
 
 }

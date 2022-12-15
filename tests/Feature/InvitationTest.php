@@ -44,8 +44,7 @@ class InvitationTest extends TestCase
         $this->signIn($project->owner);
 
         $this->post($project->path() . '/invitations', ['email' => 'notauser@example.com'])
-            ->assertSessionHasErrors('email');
-
+            ->assertSessionHasErrors('email', errorBag: 'invitations');
 
     }
 
@@ -55,10 +54,8 @@ class InvitationTest extends TestCase
         $project->invite($newUser = User::factory()->create());
 
         $this->signIn($newUser);
-        $this->post($project->path() . '/tasks', ['body' => 'new task'])
-            ->assertRedirect($project->path());
-
-        $this->get($project->path())->assertSee('new task');
+        $this->followingRedirects()->post($project->path() . '/tasks', ['body' => 'new task'])
+            ->assertSee('new task');
 
         $this->assertDatabaseHas('tasks', ['body' => 'new task']);
 

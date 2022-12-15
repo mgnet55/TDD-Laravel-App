@@ -3,9 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProjectInvitationRequest extends FormRequest
 {
+
+    protected $errorBag = 'invitations';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,14 +28,15 @@ class ProjectInvitationRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:users,email'
+            'email' => ['required', 'email', Rule::notIn($this->user()->email), 'exists:users']
         ];
     }
 
     public function messages()
     {
         return [
-            'email.exists' => 'This Email isn\'t associated with a valid account.'
+            'email.exists' => 'This Email isn\'t associated with a valid account.',
+            'email.not_in' => 'You cannot invite yourself.'
         ];
     }
 }

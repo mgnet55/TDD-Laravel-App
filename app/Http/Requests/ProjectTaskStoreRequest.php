@@ -27,4 +27,9 @@ class ProjectTaskStoreRequest extends FormRequest
             'body' => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return ['body.required' => 'Task body is required.'];
+    }
 }
