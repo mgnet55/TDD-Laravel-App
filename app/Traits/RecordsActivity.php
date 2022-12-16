@@ -30,7 +30,7 @@ trait RecordsActivity
             $this->activity()->create([
                 'description' => $description,
                 'project_id' => class_basename($this) === 'Project' ? $this->id : $this->project_id,
-                'user_id' => ($this->project ?? $this)->owner_id,
+                'user_id' => auth()->id(),
                 'changes' => $withoutChanges ? null : $this->getActivityChanges()
             ]);
 

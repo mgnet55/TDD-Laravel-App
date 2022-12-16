@@ -42,7 +42,7 @@
                                     <input
                                         type="text"
                                         name="body"
-                                        @class(['border-none group-focus:ring-2 focus:ring-0 p-0 w-full','text-gray-400 parent-focus:bg-black'=>$task->completed])
+                                        @class(['border-none group-focus:ring-2 focus:ring-0 p-0 w-full','text-gray-400 parent-focus:bg-black line-through'=>$task->completed])
                                         value="{{$task->body}}"
                                     >
                                 </label>
